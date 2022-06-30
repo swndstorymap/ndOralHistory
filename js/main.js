@@ -28,7 +28,7 @@ function createMap(){
     getData();
 };
 
-/*
+
 function createPopupContent(feature){
     var popupContent = "<p><b>Name:</b> " + feature.properties.Loc_Name + 
         "</p><p><b>County:</b> " + feature.properties.Loc_County + 
@@ -41,7 +41,7 @@ function createPopupContent(feature){
     return popupContent
 };
 
-
+/*
 function getData(){
     //load the data
     fetch("data/NDOralHistory.geojson")
@@ -83,6 +83,7 @@ function getData(){
                     feature.properties[property] = data[property];
                 }
             //pushes feature into geoJson created at the beginning of the script
+            if(feature.properties.Interviewee)
             geoJson.features.push(feature)
             });
             //add data to the map
@@ -93,11 +94,11 @@ function getData(){
 
 //function to add data to the map
 function addData(){
-    pointLayer = L.geoJson(geoJson/*,{
+    pointLayer = L.geoJson(geoJson,{
         onEachFeature:function(feature, layer){
             return onEachFeature(feature, layer)
         }
-    }*/)
+    })
     .addTo(map);
 };
 
