@@ -16,14 +16,21 @@ function createMap(){
         minZoom: 10,
         scrollWheelZoom: false,
         maxBounds: [
-            [47.084, -103.657],
-            [46.6, -102.046]
+            [47.2, -103.657],
+            [46.2, -102.046]
         ]
     });
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(map);
+
+    /*
+    L.imageOverlay('img/nd_usgs_53.png', [[47.084, -103.657],
+    [46.2, -102.046]]).addTo(map);
+    */
+
+    L.imageOverlay('img/nd_usgs_53.png').addTo(map);
 
     getData();
 };
