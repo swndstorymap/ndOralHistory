@@ -28,39 +28,6 @@ function createMap(){
     getData();
 };
 
-
-function createPopupContent(feature){
-    var popupContent = "<p><b>Name:</b> " + feature.properties.Loc_Name + 
-        "</p><p><b>County:</b> " + feature.properties.Loc_County + 
-        "</p><p><b>Town:</b> " + feature.properties.Loc_Town +
-        "</p><p><b>Interviewee:</b> " + feature.properties.Interviewee +
-        "</p><p><b>Date Range:</b> " + feature.properties.Date_rng_start + "- " + feature.properties.Date_rng_end +
-        "</p><p><b>Notes:</b> " + feature.properties.Notes +
-        "</p><p><b>Tags:</b> " + feature.propertiesTags;
-    
-    return popupContent
-};
-
-/*
-function getData(){
-    //load the data
-    fetch("data/NDOralHistory.geojson")
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(json){
-            //create a Leaflet GeoJSON layer and add it to the map
-            L.geoJson(json,{
-                onEachFeature:function(feature, layer){
-                    var popupContent = createPopupContent(feature);
-                    
-                    layer.bindPopup(popupContent)
-                }
-            }).addTo(map);
-        })  
-};
-*/
-
 //function to retrieve the data and place it on the map
 function getData(){
     //Papaparse library reads csvs - more info here: https://www.papaparse.com/
@@ -74,6 +41,8 @@ function getData(){
                 let feature = {}
                 feature.type = "Feature";
                 feature.properties = {};
+                //only get geometry for those points with lat/lon values
+                if(data.Longitude && data.Latitude)
                 feature.geometry = {
                     type: "Point",
                     coordinates: [parseFloat(data.Longitude), parseFloat(data.Latitude)]
@@ -82,8 +51,8 @@ function getData(){
                 for (const property in data){
                     feature.properties[property] = data[property];
                 }
-            //pushes feature into geoJson created at the beginning of the script
-            if(feature.properties.Interviewee)
+            //pushes feature into geoJson created at the beginning of the script, ensures feature has a value for interviewee and coordinates
+            if(feature.properties.Interviewee && data.Longitude && data.Latitude)
             geoJson.features.push(feature)
             });
             //add data to the map
@@ -105,7 +74,7 @@ function addData(){
 //function to bind popups to points
 function onEachFeature(feature, layer){
     //create new popup content
-    var popupContent = new popUpContent(feature.properties);
+    var popupContent = new popUpContent(feature);
 
     //bind the popup to the  marker    
     layer.bindPopup(popupContent.formatted);
@@ -115,11 +84,12 @@ function onEachFeature(feature, layer){
 };
 
 //fucntion to define the pop up content
-function popUpContent(properties){
-    this.properties = properties;
-    this.formatted  = "<p><b>" + properties.History + "</b></p>" + 
-                      "<p style='width: 100%; text-align: center'><a href='" + properties['Permanent Link'] + "'>View Story</a></p>"
+function popUpContent(feature){
+    this.properties = feature;
+    this.formatted  = '<h3>' + feature.properties.Loc_Name + '</h3>' +
+                      '<p>' + feature.properties.Loc_Desc + '<br>' +
+                      "<a href='" + feature.properties.Repos_link + "'><b>Link</b></a></p>" +
+                      "<div id='audio'><audio autoplay controls class='player' id='player1' height='360'width='100%' preload='none' src='/data/intv_clip/CHE_SK_20210618_LDV_001.wav' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>"
     };
-
 
 document.addEventListener('DOMContentLoaded',createMap)
