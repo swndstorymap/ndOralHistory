@@ -7,6 +7,7 @@ let geoJson = {
     name: "historyData",
     features: []
 };
+var markers = L.markerClusterGroup();
 
 function createMap(){
     //create basemap
@@ -24,13 +25,6 @@ function createMap(){
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(map);
-
-    /*
-    L.imageOverlay('img/nd_usgs_53.png', [[47.084, -103.657],
-    [46.2, -102.046]]).addTo(map);
-    */
-
-    L.imageOverlay('img/nd_usgs_53.png').addTo(map);
 
     getData();
 };
@@ -74,8 +68,11 @@ function addData(){
         onEachFeature:function(feature, layer){
             return onEachFeature(feature, layer)
         }
-    })
-    .addTo(map);
+    });
+
+    //cluster markers
+    markers.addLayer(pointLayer);
+    map.addLayer(markers);
 };
 
 //function to bind popups to points
@@ -96,7 +93,7 @@ function popUpContent(feature){
     this.formatted  = '<h3>' + feature.properties.Loc_Name + '</h3>' +
                       '<p>' + feature.properties.Loc_Desc + '<br>' +
                       "<a href='" + feature.properties.Repos_link + "'><b>Link</b></a></p>" +
-                      "<div id='audio'><audio autoplay controls class='player' id='player1' height='360'width='100%' preload='none' src='/data/intv_clip/CHE_SK_20210618_LDV_001.wav' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>"
+                      "<div id='audio'><audio autoplay controls class='player' id='player1' height='360'width='100%' preload='none' src='/data/intv_clip/" + feature.properties.Intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>"
     };
 
 document.addEventListener('DOMContentLoaded',createMap)
