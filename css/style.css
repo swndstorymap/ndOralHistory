@@ -12,3 +12,12 @@ body{
 .leaflet-popup-content-wrapper {
     width: 250pt !important
 }
+
+.head {
+    text-align: center;
+}
+
+.PO {
+    height: 100%;
+    width: 100%;
+}

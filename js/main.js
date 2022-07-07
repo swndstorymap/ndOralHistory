@@ -15,15 +15,16 @@ function createMap(){
         center: [46.6746,-102.855],
         zoom: 10,
         minZoom: 10,
-        scrollWheelZoom: false,
+        scrollWheelZoom: true,
         maxBounds: [
             [47.2, -103.657],
             [46.2, -102.046]
-        ]
+        ],
+        maxZoom: 15
     });
 
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     }).addTo(map);
 
     getData();
@@ -87,13 +88,25 @@ function onEachFeature(feature, layer){
     return layer;
 };
 
-//fucntion to define the pop up content
+//function to define the pop up content
 function popUpContent(feature){
     this.properties = feature;
-    this.formatted  = '<h3>' + feature.properties.Loc_Name + '</h3>' +
+    this.formatted  = "<div class='head'><h2>" + feature.properties.Loc_Name + '</h2></div>'
+                      //"<a href='" + feature.properties.Img_link + "'><img id='PO' src='" + feature.properties.Img_file + '></a>' +
+                      //'<img id="PO" src="' + feature.properties.Img_file + '" width="100%" height="100%">'
+
+    //only creates an image if an image link exists
+    let popUp = this
+    if(feature.properties.Img_file)
+        popUp.formatted += "<div class='image'><img class= 'PO' src='" + feature.properties.Img_file + "'></div>"
+                 
+    this.formatted += '<p><b>Interviewee: </b>' + feature.properties.Interviewee + '<br>' +
+                      '<b>Interview Date: </b>' + feature.properties.Interview_date + '</p>' +
                       '<p>' + feature.properties.Loc_Desc + '<br>' +
                       "<a href='" + feature.properties.Repos_link + "'><b>Link</b></a></p>" +
-                      "<div id='audio'><audio autoplay controls class='player' id='player1' height='360'width='100%' preload='none' src='/data/intv_clip/" + feature.properties.Intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>"
+                      "<div id='audio'><audio controls class='player' id='player1' height='360'width='100%' preload='none' src='/data/intv_clip/" + feature.properties.Intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>"
     };
 
 document.addEventListener('DOMContentLoaded',createMap)
+
+//"<a href='" + feature.properties.Img_link + "'><img id='PO' src='" + feature.properties.Img_file + '></a>' +
