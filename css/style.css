@@ -1,4 +1,10 @@
 /*Add CSS styles here*/
+@font-face {
+    font-family: 'Roboto';
+    src: url("lib/RobotoSerif-VariableFont_GRAD,opsz,wdth,wght.ttf") format(ttf);
+    font-style: normal;
+}
+
 body{
     margin: 0
 }
@@ -15,6 +21,27 @@ body{
 
 .head {
     text-align: center;
+}
+
+.popUp h1 {
+    font-family: Roboto, serif;
+    font-weight: 400;
+    margin-top: 2%;
+    margin-bottom: 0%;
+}
+
+.popUp p.a {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.popUp p.b {
+    padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 3%;
+    padding-right: 3%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 .PO {

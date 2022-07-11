@@ -9,6 +9,16 @@ let geoJson = {
 };
 var markers = L.markerClusterGroup();
 
+//change marker to custom icon
+L.Marker.prototype.options.icon = L.icon({
+    iconUrl: 'img/ND_icon.png',
+    shadowUrl: 'lib/leaflet/images/marker-shadow.png',
+    shadowSize: [30, 41],
+    shadowAnchor: [10, 20],
+    iconSize: [25, 41],
+    popupAnchor: [0, -20],
+});
+
 function createMap(){
     //create basemap
     map = L.map('map', {
@@ -44,17 +54,17 @@ function getData(){
                 feature.type = "Feature";
                 feature.properties = {};
                 //only get geometry for those points with lat/lon values
-                if(data.Longitude && data.Latitude)
+                if(data.longitude && data.latitude)
                 feature.geometry = {
                     type: "Point",
-                    coordinates: [parseFloat(data.Longitude), parseFloat(data.Latitude)]
+                    coordinates: [parseFloat(data.longitude), parseFloat(data.latitude)]
                 };
                 //for loop turns csv columns into feature properties
                 for (const property in data){
                     feature.properties[property] = data[property];
                 }
             //pushes feature into geoJson created at the beginning of the script, ensures feature has a value for interviewee and coordinates
-            if(feature.properties.Interviewee && data.Longitude && data.Latitude)
+            if(feature.properties.interviewee && data.longitude && data.latitude)
             geoJson.features.push(feature)
             });
             //add data to the map
@@ -90,23 +100,19 @@ function onEachFeature(feature, layer){
 
 //function to define the pop up content
 function popUpContent(feature){
-    this.properties = feature;
-    this.formatted  = "<div class='head'><h2>" + feature.properties.Loc_Name + '</h2></div>'
-                      //"<a href='" + feature.properties.Img_link + "'><img id='PO' src='" + feature.properties.Img_file + '></a>' +
-                      //'<img id="PO" src="' + feature.properties.Img_file + '" width="100%" height="100%">'
+    this.formatted = "<div class='popUp'>"
 
     //only creates an image if an image link exists
-    let popUp = this
-    if(feature.properties.Img_file)
-        popUp.formatted += "<div class='image'><img class= 'PO' src='" + feature.properties.Img_file + "'></div>"
+    if(feature.properties.img_name)
+        this.formatted += "<div class='image'><a href='" + feature.properties.img_link + "'><img class= 'PO' src='img/" + feature.properties.img_name + "'></a></div>"
                  
-    this.formatted += '<p><b>Interviewee: </b>' + feature.properties.Interviewee + '<br>' +
-                      '<b>Interview Date: </b>' + feature.properties.Interview_date + '</p>' +
-                      '<p>' + feature.properties.Loc_Desc + '<br>' +
-                      "<a href='" + feature.properties.Repos_link + "'><b>Link</b></a></p>" +
-                      "<div id='audio'><audio controls class='player' id='player1' height='360'width='100%' preload='none' src='/data/intv_clip/" + feature.properties.Intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>"
+    this.formatted += "<div class='head'><h1>" + feature.properties.loc_name + '</h1></div>' +
+                      '<p class="b">' + feature.properties.loc_desc + '<br>' +
+                      "<a href='" + feature.properties.repos_link + "'><b>Link</b></a></p>" +
+                      '<p class="a"><b>Interviewee: </b>' + feature.properties.interviewee + '<br>' +
+                      '<b>Interview Date: </b>' + feature.properties.intv_date + '</p>' +
+                      "<div id='audio'><audio controls class='player' id='player1' height='360'width='100%' preload='none' src='data/intv_clip/" + feature.properties.intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>" +
+                      '</div>'
     };
 
 document.addEventListener('DOMContentLoaded',createMap)
-
-//"<a href='" + feature.properties.Img_link + "'><img id='PO' src='" + feature.properties.Img_file + '></a>' +
