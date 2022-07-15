@@ -27,7 +27,7 @@ function createMap(){
         minZoom: 10,
         scrollWheelZoom: true,
         maxBounds: [
-            [47.2, -103.657],
+            [47.4, -103.657],
             [46.2, -102.046]
         ],
         maxZoom: 15
@@ -108,11 +108,13 @@ function popUpContent(feature){
                  
     this.formatted += "<div class='head'><h1>" + feature.properties.loc_name + '</h1></div>' +
                       '<p class="b">' + feature.properties.loc_desc + '<br>' +
-                      "<a href='" + feature.properties.repos_link + "'><b>Link</b></a></p>" +
+                      "<a href='" + feature.properties.repos_link + "'>View Transcript</a></p>" +
                       '<p class="a"><b>Interviewee: </b>' + feature.properties.interviewee + '<br>' +
-                      '<b>Interview Date: </b>' + feature.properties.intv_date + '</p>' +
-                      "<div id='audio'><audio controls class='player' id='player1' height='360'width='100%' preload='none' src='data/intv_clip/" + feature.properties.intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>" +
-                      '</div>'
+                      '<b>Interview Date: </b>' + feature.properties.intv_date + '</p>'
+
+    if(feature.properties.intv_clip)
+        this.formatted += "<div id='audio'><audio controls class='player' id='player1' height='360'width='100%' preload='none' src='data/intv_clip/" + feature.properties.intv_clip + ".mp3' style='max-width: 100%' tabindex='0' title='MediaElement'></audio></div>" +
+        '</div>'
     };
 
 document.addEventListener('DOMContentLoaded',createMap)
