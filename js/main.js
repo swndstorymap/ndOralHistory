@@ -22,13 +22,13 @@ L.Marker.prototype.options.icon = L.icon({
 function createMap(){
     //create basemap
     map = L.map('map', {
-        center: [46.6746,-102.855],
-        zoom: 10,
-        minZoom: 10,
+        center: [46.9, -102.42],
+        zoom: 9,
+        minZoom: 9,
         scrollWheelZoom: true,
         maxBounds: [
-            [47.4, -103.657],
-            [46.2, -102.046]
+            [48.15, -104.89],
+            [45.92, -100.02]
         ],
         maxZoom: 15
     });
@@ -107,9 +107,12 @@ function popUpContent(feature){
         this.formatted += "<div class='image'><a href='" + feature.properties.img_link + "'><img class= 'PO' src='img/" + feature.properties.img_name + "'></a></div>"
                  
     this.formatted += "<div class='head'><h1>" + feature.properties.loc_name + '</h1></div>' +
-                      '<p class="b">' + feature.properties.loc_desc + '<br>' +
-                      "<a href='" + feature.properties.repos_link + "'>View Transcript</a></p>" +
-                      '<p class="a"><b>Interviewee: </b>' + feature.properties.interviewee + '<br>' +
+                      '<p class="b">' + feature.properties.loc_desc + '<br>'
+
+    if(feature.properties.repos_link)
+        this.formatted += "<a href='" + feature.properties.repos_link + "'>Find out more</a></p>"
+
+    this.formatted += '<p class="a"><b>Interviewee: </b>' + feature.properties.interviewee + '<br>' +
                       '<b>Interview Date: </b>' + feature.properties.intv_date + '</p>'
 
     if(feature.properties.intv_clip)
